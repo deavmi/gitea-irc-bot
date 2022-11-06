@@ -59,8 +59,14 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 		
 		JSONValue[] assignees = issueBlock["assignees"].array();
 
-		
-		ircBot.channelMessage("Opened issue '"~issueTitle~"' by "~to!(string)(assignees), "#tlang");
+
+		string[] assigneeNames;
+		foreach(JSONValue assignee; assignees)		
+		{
+			assigneeNames~=assignee["username"].str();
+		}
+
+		ircBot.channelMessage("Opened issue '"~issueTitle~"' by "~to!(string)(assigneeNames), "#tlang");
 
 	}
 
