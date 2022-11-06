@@ -43,7 +43,29 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 
 void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 {
+	//TODO: Add error handling for json parsing
+	JSONValue json = parseJSON(request.json().toString());
 
+	writeln(json);
+
+	//Extract the type of action
+	JSONValue issueBlock = json["issue"];
+	string issueTitle = issueBlock["title"].str();
+	string issueAction = json["action"].str();
+
+	/* Opened a new issue */
+	if(cmp(issueAction, "opened") == 0)
+	{
+		
+		JSONValue[] assignees = issueBlock["assignees"].array();
+
+		
+		ircBot.channelMessage("Opened issue '"~issueTitle~"' by "~to!(string)(assignees), "#tlang");
+
+	}
+
+
+	response.writeBody("Yo");
 }
 
 IRCBot ircBot;
