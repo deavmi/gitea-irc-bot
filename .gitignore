@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/gitea-irc-bot
+gitea-irc-bot.so
+gitea-irc-bot.dylib
+gitea-irc-bot.dll
+gitea-irc-bot.a
+gitea-irc-bot.lib
+gitea-irc-bot-test-*
+*.exe
+*.o
+*.obj
+*.lst

@@ -1,0 +1,13 @@
+{
+	"authors": [
+		"Tristan B. Kildaire"
+	],
+	"copyright": "Copyright © 2022, Tristan B. Kildaire",
+	"dependencies": {
+		"birchwood": "0.3.3",
+		"vibe-d": "~>0.9.5"
+	},
+	"description": "A Gitea webhook-based IRC bot",
+	"license": "LGPL-3.0",
+	"name": "gitea-irc-bot"
+}
