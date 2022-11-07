@@ -4,6 +4,7 @@ import core.thread;
 import vibe.d;
 import std.json;
 import std.string;
+import std.conv : to;
 
 private class IRCBot : Client
 {
@@ -23,7 +24,7 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 	//TODO: Add error handling for json parsing
 	JSONValue json = parseJSON(request.json().toString());
 
-	writeln(json);
+	writeln(json.toPrettyString());
 
 	// Extract the commit
 	JSONValue commitBlock = json["commits"].array()[0];
@@ -46,30 +47,49 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 	//TODO: Add error handling for json parsing
 	JSONValue json = parseJSON(request.json().toString());
 
-	writeln(json);
+	writeln(json.toPrettyString());
 
 	//Extract the type of action
 	JSONValue issueBlock = json["issue"];
 	string issueTitle = issueBlock["title"].str();
+	string issueURL = issueBlock["url"].str();
+	long issueID = issueBlock["id"].integer();
 	string issueAction = json["action"].str();
 
 	/* Opened a new issue */
 	if(cmp(issueAction, "opened") == 0)
 	{
+		JSONValue userBlock = issueBlock["user"];
+		string username = userBlock["username"].str();
 		
-		JSONValue[] assignees = issueBlock["assignees"].array();
+		ircBot.channelMessage("Opened issue '"~issueTitle~"' (#"~to!(string)(issueID)~") by "~username~" ["~issueURL~"]", "#tlang");
+	}
+	/* Closed an old issue */
+	else if(cmp(issueAction, "closed") == 0)
+	{
+		JSONValue userBlock = issueBlock["user"];
+		string username = userBlock["username"].str();
+		
+		ircBot.channelMessage("Closed issue '"~issueTitle~"' (#"~to!(string)(issueID)~") by "~username~" ["~issueURL~"]", "#tlang");
+	}
+	/* Added a comment */
+	else if(cmp(issueAction, "created") == 0)
+	{
+		JSONValue commentBlock = json["comment"];
+		string commentBody = commentBlock["body"].str();
 
+		ulong commentLen = commentBody.length;
 
-		string[] assigneeNames;
-		foreach(JSONValue assignee; assignees)		
+		if(!(commentLen <= 30))
 		{
-			assigneeNames~=assignee["username"].str();
+			commentBody=commentBody[0..31]~"...";
 		}
 
-		ircBot.channelMessage("Opened issue '"~issueTitle~"' by "~to!(string)(assigneeNames), "#tlang");
+		JSONValue userBlock = commentBlock["user"];
+		string username = userBlock["username"].str();
 
+		ircBot.channelMessage("New comment '"~commentBody~"' by "~username~" on issue #"~to!(string)(issueID)~" ["~issueURL~"]", "#tlang");		
 	}
-
 
 	response.writeBody("Yo");
 }
