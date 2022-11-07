@@ -72,6 +72,14 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 		
 		ircBot.channelMessage("Closed issue '"~issueTitle~"' (#"~to!(string)(issueID)~") by "~username~" ["~issueURL~"]", "#tlang");
 	}
+	/* Reopened an old issue */
+	else if(cmp(issueAction, "reopened") == 0)
+	{
+		JSONValue userBlock = issueBlock["user"];
+		string username = userBlock["username"].str();
+		
+		ircBot.channelMessage("Reopened issue '"~issueTitle~"' (#"~to!(string)(issueID)~") by "~username~" ["~issueURL~"]", "#tlang");
+	}
 	/* Added a comment */
 	else if(cmp(issueAction, "created") == 0)
 	{
