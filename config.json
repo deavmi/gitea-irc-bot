@@ -1,0 +1,13 @@
+{
+    "irc" : {
+        "host": "fd08:8441:e254::5",
+        "port": 6667,
+        "nickname": "tlangbot",
+        "realname": "TLang Development Bot",
+        "channel": "#tlang"
+    },
+    "ntfy": {
+        "endpoint": "http://ntfy.sh",
+        "topic": "tlang_dev"
+    }
+}

@@ -1,7 +1,9 @@
 gitea-irc-bot
 =============
 
-## Setup
+## Usage
+
+### Webhook setup
 
 You should setup the following webhooks on your Gitea instance:
 
@@ -19,3 +21,40 @@ You should setup the following webhooks on your Gitea instance:
     * Method: `POST`
     * Enable "Custom Events":
         * `Push`
+
+### Building
+
+Simply clone the repository with:
+
+```bash
+TODO: Add clone command
+```
+
+Then run the following command to build the library:
+
+```bash
+cd gitea-irc-bot
+dub build
+```
+
+### Configuring
+
+You should have a `config.json` in the repository. You can now customize this to tweak settings for the bot.
+
+An example configuration file can look as follows:
+
+```json
+{
+    "irc" : {
+        "host": "fd08:8441:e254::5",
+        "port": 6667,
+        "nickname": "tlangbot",
+        "realname": "TLang Development Bot",
+        "channel": "#tlang"
+    },
+    "ntfy": {
+        "endpoint": "http://ntfy.sh",
+        "topic": "tlang_dev"
+    }
+}
+```
