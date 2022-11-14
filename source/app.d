@@ -56,9 +56,8 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 		string ircMessage = "Commit: "~commitMessage~" ("~commitID~") by "~authorName~" ("~authorEmail~") ["~commitURL~"]";
 		ircBot.channelMessage(ircMessage, "#tlang"); //TODO: Add IRC error handling
 
-
 		/* Send message to NTFY server */
-		post(ntfyServer~"/"~ntfyChannel, ircMessage);
+		notifySH(ircMessage);
 	}
 	catch(Exception e)
 	{
@@ -100,7 +99,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 			ircBot.channelMessage(ircMessage, channelName);
 
 			/* Send message to NTFY server */
-			post(ntfyServer~"/"~ntfyChannel, ircMessage);
+			notifySH(ircMessage);
 		}
 		/* Closed an old issue */
 		else if(cmp(issueAction, "closed") == 0)
@@ -113,7 +112,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 			ircBot.channelMessage(ircMessage, channelName);
 
 			/* Send message to NTFY server */
-			post(ntfyServer~"/"~ntfyChannel, ircMessage);
+			notifySH(ircMessage);
 		}
 		/* Reopened an old issue */
 		else if(cmp(issueAction, "reopened") == 0)
@@ -126,7 +125,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 			ircBot.channelMessage(ircMessage, channelName);
 
 			/* Send message to NTFY server */
-			post(ntfyServer~"/"~ntfyChannel, ircMessage);
+			notifySH(ircMessage);
 		}
 		/* Added a comment */
 		else if(cmp(issueAction, "created") == 0)
@@ -149,7 +148,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 			ircBot.channelMessage(ircMessage, channelName);		
 
 			/* Send message to NTFY server */
-			post(ntfyServer~"/"~ntfyChannel, ircMessage);
+			notifySH(ircMessage);
 		}
 	}
 	catch(Exception e)
@@ -203,6 +202,24 @@ string channelName;
 
 
 import std.file;
+
+
+/** 
+ * Sends a message to ntfy.sh (only if it is enabled)
+ *
+ * Params:
+ *   message = the message to send to ntfy.sh
+ */
+void notifySH(string message)
+{
+	if(hasNTFYSH)
+	{
+		gprintln("Sending message to ntfy.sh ...");
+		post(ntfyServer~"/"~ntfyChannel, message);
+		gprintln("Sending message to ntfy.sh ... [done]");
+	}
+}
+
 
 void main(string[] args)
 {
