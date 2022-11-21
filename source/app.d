@@ -313,19 +313,25 @@ void main(string[] args)
 	}
 
 	
+	/* Configure IRC client */
 	ConnectionInfo connInfo = ConnectionInfo.newConnection(serverHost, serverPort, nickname);
-
 	ircBot = new IRCBot(connInfo);
 
+	/* Connect to the server */
 	ircBot.connect();
 
+	/* Choose a nickname */
 	Thread.sleep(dur!("seconds")(2));
 	ircBot.command(new Message("", "NICK", nickname));
 
+	/* Identify oneself */
     Thread.sleep(dur!("seconds")(2));
+	//TODO: Clean this string up
     ircBot.command(new Message("", "USER", "giteabotweb giteabotweb irc.frdeenode.net :Tristan B. Kildaire"));
-        
+    
+	/* Join the requested channel */
     Thread.sleep(dur!("seconds")(4));
+	//TODO: Use the new `join()` method
     ircBot.command(new Message("", "JOIN", channelName));
 
 
