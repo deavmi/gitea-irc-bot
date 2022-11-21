@@ -300,14 +300,10 @@ void main(string[] args)
 		}
 
 		gprintln(config.toPrettyString());
-
-
-		
 	}
 	catch(JSONException e)
 	{
 		gprintln("There was an error whilst parsing the config file:\n\n"~e.msg, DebugType.ERROR);
-		//FIXME: Add exit
 		exit(-1);
 	}
 	catch(ErrnoException e)
@@ -317,7 +313,6 @@ void main(string[] args)
 	}
 
 	
-
 	ConnectionInfo connInfo = ConnectionInfo.newConnection(serverHost, serverPort, nickname);
 
 	ircBot = new IRCBot(connInfo);
