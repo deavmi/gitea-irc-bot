@@ -202,7 +202,7 @@ string channelName;
 
 
 import std.file;
-
+import core.stdc.stdlib;
 
 /** 
  * Sends a message to ntfy.sh (only if it is enabled)
@@ -212,6 +212,8 @@ import std.file;
  */
 void notifySH(string message)
 {
+	//TODO: Add support for fancier formatted NTFY.SH messages
+	
 	if(hasNTFYSH)
 	{
 		gprintln("Sending message to ntfy.sh ...");
@@ -220,13 +222,13 @@ void notifySH(string message)
 	}
 }
 
+// import core.posix;
 
 void main(string[] args)
 {
 	string configFilePath;
 
 	/* If given an argument then use it as the configuration file */
-	//TODO: Don't allow more than 1 argument
 	if(args.length == 2)
 	{
 		/* Configuration file path */
@@ -236,6 +238,7 @@ void main(string[] args)
 	else if(args.length > 2)
 	{
 		gprintln("Only one argument, the path to the configuration file, is allowed", DebugType.ERROR);
+		exit(-1);
 	}
 	/* If there are no arguments, assume default config.json file */
 	else
@@ -289,13 +292,13 @@ void main(string[] args)
 	{
 		gprintln("There was an error whilst parsing the config file:\n\n"~e.msg, DebugType.ERROR);
 		//FIXME: Add exit
-		// exit(1);
+		exit(1);
 	}
 	catch(ErrnoException e)
 	{
 		gprintln("Invalid JSON within the configuration or missing needed keys: \n\n"~e.msg, DebugType.ERROR);
 		//FIXME: Add exit
-		// exit(1);
+		exit(1);
 	}
 
 	
