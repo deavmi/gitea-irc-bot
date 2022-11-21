@@ -192,6 +192,9 @@ IRCBot ircBot;
 JSONValue config;
 
 
+string[] listenAddresses;
+ushort listenPort;
+
 bool hasNTFYSH = false;
 string ntfyServer, ntfyChannel;
 
@@ -199,6 +202,7 @@ string serverHost;
 ushort serverPort;
 string nickname;
 string channelName;
+
 
 
 import std.file;
@@ -260,6 +264,18 @@ void main(string[] args)
 		/* Parse the configuration */
 		config = parseJSON(cast(string)configData);
 
+		/* Web hook server details */
+		JSONValue webhookBlock = config["webhook"];
+		JSONValue listenBlock = webhookBlock["listen"];
+		JSONValue[] listenAddressesJSON = listenBlock["addresses"].array();
+		foreach(JSONValue listenAddress; listenAddressesJSON)
+		{
+			/* Get the listening address */
+			string listenAddressStr = listenAddress.str();
+			listenAddresses~=listenAddressStr;
+		}
+		listenPort = cast(ushort)(listenBlock["port"].integer());
+
 		/* IRC server details */
 		JSONValue ircBlock = config["irc"];
 		serverHost = ircBlock["host"].str();
@@ -318,10 +334,10 @@ void main(string[] args)
     ircBot.command(new Message("", "JOIN", channelName));
 
 
-	/* TODO: Put vibe-d initialization here and make the client global in the module */
+	/* Setup the web server */
 	HTTPServerSettings httpServerSettings = new HTTPServerSettings();
-	httpServerSettings.port = 6969;
-	httpServerSettings.bindAddresses = ["::"];
+	httpServerSettings.port = listenPort;
+	httpServerSettings.bindAddresses = listenAddresses;
 
 	/* Create a router and add the supported routes */
 	URLRouter router = new URLRouter();

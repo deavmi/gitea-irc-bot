@@ -1,4 +1,10 @@
 {
+    "webhook" : {
+        "listen" : {
+            "addresses": ["::"],
+            "port": 6969
+        }
+    },
     "irc" : {
         "host": "fd08:8441:e254::5",
         "port": 6667,
