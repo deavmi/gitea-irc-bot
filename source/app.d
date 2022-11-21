@@ -292,13 +292,12 @@ void main(string[] args)
 	{
 		gprintln("There was an error whilst parsing the config file:\n\n"~e.msg, DebugType.ERROR);
 		//FIXME: Add exit
-		exit(1);
+		exit(-1);
 	}
 	catch(ErrnoException e)
 	{
-		gprintln("There was a problem opening the configuration file: \n\n"~e.msg, DebugType.ERROR);
-		//FIXME: Add exit
-		exit(1);
+		gprintln("There was a problem opening the configuration file: "~e.msg, DebugType.ERROR);
+		exit(-1);
 	}
 
 	
