@@ -296,7 +296,7 @@ void main(string[] args)
 	}
 	catch(ErrnoException e)
 	{
-		gprintln("Invalid JSON within the configuration or missing needed keys: \n\n"~e.msg, DebugType.ERROR);
+		gprintln("There was a problem opening the configuration file: \n\n"~e.msg, DebugType.ERROR);
 		//FIXME: Add exit
 		exit(1);
 	}
