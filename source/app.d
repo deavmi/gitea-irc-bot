@@ -8,7 +8,8 @@ import std.conv : to;
 import std.net.curl;
 import gogga;
 import std.exception;
-
+import std.file;
+import core.stdc.stdlib : exit;
 
 /** 
  * TODO list
@@ -204,10 +205,6 @@ string nickname;
 string channelName;
 
 
-
-import std.file;
-import core.stdc.stdlib;
-
 /** 
  * Sends a message to ntfy.sh (only if it is enabled)
  *
@@ -225,8 +222,6 @@ void notifySH(string message)
 		gprintln("Sending message to ntfy.sh ... [done]");
 	}
 }
-
-// import core.posix;
 
 void main(string[] args)
 {
