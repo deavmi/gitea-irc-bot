@@ -294,7 +294,7 @@ void main(string[] args)
 			gprintln("Not configuring NTFY as config is partially broken:\n\n"~e.msg, DebugType.WARNING);
 		}
 
-		gprintln(config.toPrettyString());
+		gprintln("Your configguration is: \n"~config.toPrettyString());
 	}
 	catch(JSONException e)
 	{
