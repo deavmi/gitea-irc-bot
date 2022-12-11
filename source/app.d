@@ -187,6 +187,9 @@ void pullRequestHandler(HTTPServerRequest request, HTTPServerResponse response)
 
 
 /* IRC client */
+//TODO: THis should have a lock on it (maybe shared which let's us automatically do it)
+//such that we can have another thread replace it when a disconnect happens or just to reconnect it
+//TODO: Birchwood handling of disconnects (check this)
 IRCBot ircBot;
 
 /* Configuration file */
