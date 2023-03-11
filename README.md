@@ -27,7 +27,7 @@ You should setup the following webhooks on your Gitea instance:
 Simply clone the repository with:
 
 ```bash
-TODO: Add clone command
+git clone https://github.com/deavmi/gitea-irc-bot
 ```
 
 Then run the following command to build the library:
