@@ -249,7 +249,7 @@ void main(string[] args)
 	/* If we have more than two arguments then it is an error */
 	else if(args.length > 2)
 	{
-		logger.info("Only one argument, the path to the configuration file, is allowed");
+		logger.error("Only one argument, the path to the configuration file, is allowed");
 		exit(-1);
 	}
 	/* If there are no arguments, assume default config.json file */
@@ -304,19 +304,19 @@ void main(string[] args)
 		}
 		catch(JSONException e)
 		{
-			logger.info("Not configuring NTFY as config is partially broken:\n\n"~e.msg);
+			logger.warn("Not configuring NTFY as config is partially broken:\n\n"~e.msg);
 		}
 
-		logger.info("Your configguration is: \n"~config.toPrettyString());
+		logger.info("Your configuration is: \n"~config.toPrettyString());
 	}
 	catch(JSONException e)
 	{
-		logger.info("There was an error whilst parsing the config file:\n\n"~e.msg);
+		logger.error("There was an error whilst parsing the config file:\n\n"~e.msg);
 		exit(-1);
 	}
 	catch(ErrnoException e)
 	{
-		logger.info("There was a problem opening the configuration file: "~e.msg);
+		logger.error("There was a problem opening the configuration file: "~e.msg);
 		exit(-1);
 	}
 
