@@ -11,6 +11,16 @@ import std.exception;
 import std.file;
 import core.stdc.stdlib : exit;
 
+import gogga;
+
+
+GoggaLogger logger;
+static this()
+{
+	logger = new GoggaLogger();
+}
+
+
 /** 
  * TODO list
  *
@@ -220,9 +230,9 @@ void notifySH(string message)
 	
 	if(hasNTFYSH)
 	{
-		gprintln("Sending message to ntfy.sh ...");
+		logger.info("Sending message to ntfy.sh ...");
 		post(ntfyServer~"/"~ntfyChannel, message);
-		gprintln("Sending message to ntfy.sh ... [done]");
+		logger.info("Sending message to ntfy.sh ... [done]");
 	}
 }
 
@@ -239,7 +249,7 @@ void main(string[] args)
 	/* If we have more than two arguments then it is an error */
 	else if(args.length > 2)
 	{
-		gprintln("Only one argument, the path to the configuration file, is allowed", DebugType.ERROR);
+		logger.info("Only one argument, the path to the configuration file, is allowed");
 		exit(-1);
 	}
 	/* If there are no arguments, assume default config.json file */
@@ -294,19 +304,19 @@ void main(string[] args)
 		}
 		catch(JSONException e)
 		{
-			gprintln("Not configuring NTFY as config is partially broken:\n\n"~e.msg, DebugType.WARNING);
+			logger.info("Not configuring NTFY as config is partially broken:\n\n"~e.msg);
 		}
 
-		gprintln("Your configguration is: \n"~config.toPrettyString());
+		logger.info("Your configguration is: \n"~config.toPrettyString());
 	}
 	catch(JSONException e)
 	{
-		gprintln("There was an error whilst parsing the config file:\n\n"~e.msg, DebugType.ERROR);
+		logger.info("There was an error whilst parsing the config file:\n\n"~e.msg);
 		exit(-1);
 	}
 	catch(ErrnoException e)
 	{
-		gprintln("There was a problem opening the configuration file: "~e.msg, DebugType.ERROR);
+		logger.info("There was a problem opening the configuration file: "~e.msg);
 		exit(-1);
 	}
 
