@@ -339,8 +339,7 @@ void main(string[] args)
     
 	/* Join the requested channel */
     Thread.sleep(dur!("seconds")(4));
-	//TODO: Use the new `join()` method
-    ircBot.command(new Message("", "JOIN", channelName));
+    ircBot.joinChannel(channelName);
 
 
 	/* Setup the web server */
