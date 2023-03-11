@@ -6,7 +6,7 @@
         }
     },
     "irc" : {
-        "host": "fd08:8441:e254::5",
+        "host": "worcester.community.deavmi.crxn",
         "port": 6667,
         "nickname": "tlangbot",
         "realname": "TLang Development Bot",
