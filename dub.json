@@ -9,6 +9,6 @@
 		"vibe-d": "0.9.6-beta.2"
 	},
 	"description": "A Gitea webhook-based IRC bot",
-	"license": "LGPL-3.0",
+	"license": "AGPL-3.0",
 	"name": "gitea-irc-bot"
 }

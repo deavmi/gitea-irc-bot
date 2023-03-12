@@ -60,3 +60,7 @@ An example configuration file can look as follows:
 ```
 
 You can also run the program with `gitea-irc-bot myConfig.json` to specify a custom JSON configuration path other than the default.
+
+## License
+
+AGPL 3.0
