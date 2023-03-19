@@ -14,7 +14,7 @@ import core.stdc.stdlib : exit;
 import gogga;
 
 
-GoggaLogger logger;
+private __gshared GoggaLogger logger;
 static this()
 {
 	logger = new GoggaLogger();
