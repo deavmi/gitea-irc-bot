@@ -63,8 +63,10 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 		JSONValue authorBlock = commitBlock["author"];
 		string authorName = authorBlock["name"].str();
 		string authorEmail = authorBlock["email"].str();
+
+		string repositoryName = json["repository"]["full_name"].str();
 		
-		string ircMessage = "Commit: "~commitMessage~" ("~commitID~") by "~authorName~" ("~authorEmail~") ["~commitURL~"]";
+		string ircMessage = "["~repositoryName~"] New commit "~commitMessage~" ("~commitID~") by "~authorName~" ("~authorEmail~") ["~commitURL~"]";
 		ircBot.channelMessage(ircMessage, channelName); //TODO: Add IRC error handling
 
 		/* Send message to NTFY server */
