@@ -98,6 +98,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 		string issueURL = issueBlock["url"].str();
 		long issueID = issueBlock["id"].integer();
 		string issueAction = json["action"].str();
+		string repositoryName = issueBlock["repository"]["full_name"].str();
 
 		/* Opened a new issue */
 		if(cmp(issueAction, "opened") == 0)
@@ -106,7 +107,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 			string username = userBlock["username"].str();
 			
 			//TODO: Add IRC error handling
-			string ircMessage = "Opened issue '"~issueTitle~"' (#"~to!(string)(issueID)~") by "~username~" ["~issueURL~"]";
+			string ircMessage = "["~repositoryName~"] Opened issue '"~issueTitle~"' (#"~to!(string)(issueID)~") by "~username~" ["~issueURL~"]";
 			ircBot.channelMessage(ircMessage, channelName);
 
 			/* Send message to NTFY server */
@@ -119,7 +120,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 			string username = userBlock["username"].str();
 			
 			//TODO: Add IRC error handling
-			string ircMessage = "Closed issue '"~issueTitle~"' (#"~to!(string)(issueID)~") by "~username~" ["~issueURL~"]";
+			string ircMessage = "["~repositoryName~"] Closed issue '"~issueTitle~"' (#"~to!(string)(issueID)~") by "~username~" ["~issueURL~"]";
 			ircBot.channelMessage(ircMessage, channelName);
 
 			/* Send message to NTFY server */
@@ -132,7 +133,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 			string username = userBlock["username"].str();
 			
 			//TODO: Add IRC error handling
-			string ircMessage = "Reopened issue '"~issueTitle~"' (#"~to!(string)(issueID)~") by "~username~" ["~issueURL~"]";
+			string ircMessage = "["~repositoryName~"] Reopened issue '"~issueTitle~"' (#"~to!(string)(issueID)~") by "~username~" ["~issueURL~"]";
 			ircBot.channelMessage(ircMessage, channelName);
 
 			/* Send message to NTFY server */
@@ -155,7 +156,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 			string username = userBlock["username"].str();
 
 			//TODO: Add IRC error handling
-			string ircMessage = "New comment '"~commentBody~"' by "~username~" on issue #"~to!(string)(issueID)~" ["~issueURL~"]";
+			string ircMessage = "["~repositoryName~"] New comment '"~commentBody~"' by "~username~" on issue #"~to!(string)(issueID)~" ["~issueURL~"]";
 			ircBot.channelMessage(ircMessage, channelName);		
 
 			/* Send message to NTFY server */
