@@ -65,7 +65,7 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 		string authorEmail = authorBlock["email"].str();
 		
 		string ircMessage = "Commit: "~commitMessage~" ("~commitID~") by "~authorName~" ("~authorEmail~") ["~commitURL~"]";
-		ircBot.channelMessage(ircMessage, "#tlang"); //TODO: Add IRC error handling
+		ircBot.channelMessage(ircMessage, channelName); //TODO: Add IRC error handling
 
 		/* Send message to NTFY server */
 		notifySH(ircMessage);
