@@ -4,7 +4,7 @@
 	],
 	"copyright": "Copyright © 2023, Tristan B. Kildaire",
 	"dependencies": {
-		"birchwood": "1.0.1",
+		"birchwood": "2.0.0",
 		"gogga": "2.1.18",
 		"vibe-d": "0.9.6-beta.2"
 	},
