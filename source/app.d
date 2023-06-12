@@ -122,7 +122,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 			string username = userBlock["username"].str();
 			
 			//TODO: Add IRC error handling
-			string ircMessage = "["~repositoryName~"] Closed issue '"~issueTitle~"' (#"~to!(string)(issueID)~") by "~username~" ["~issueURL~"]";
+			string ircMessage = bold("["~repositoryName~"]")~setForeground(SimpleColor.RED)~" Closed issue"~resetForegroundBackground()~" '"~issueTitle~"' on issue "~bold("#"~to!(string)(issueID))~" by "~italics(username)~" ["~underline(issueURL)~"]";
 			ircBot.channelMessage(ircMessage, channelName);
 
 			/* Send message to NTFY server */
@@ -135,7 +135,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 			string username = userBlock["username"].str();
 			
 			//TODO: Add IRC error handling
-			string ircMessage = "["~repositoryName~"] Reopened issue '"~issueTitle~"' (#"~to!(string)(issueID)~") by "~username~" ["~issueURL~"]";
+			string ircMessage = bold("["~repositoryName~"]")~setForeground(SimpleColor.RED)~" Reopened issue"~resetForegroundBackground()~" '"~issueTitle~"' "~bold("#"~to!(string)(issueID))~" by "~italics(username)~" ["~underline(issueURL)~"]";
 			ircBot.channelMessage(ircMessage, channelName);
 
 			/* Send message to NTFY server */
@@ -325,7 +325,7 @@ void main(string[] args)
 
 	
 	/* Configure IRC client */
-	ConnectionInfo connInfo = ConnectionInfo.newConnection(serverHost, serverPort, nickname);
+	ConnectionInfo connInfo = ConnectionInfo.newConnection(serverHost, serverPort, nickname, "tbot", "TLang Bot");
 	ircBot = new IRCBot(connInfo);
 
 	/* Connect to the server */
