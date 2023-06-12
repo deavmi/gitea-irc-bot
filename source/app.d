@@ -66,7 +66,7 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 
 		string repositoryName = json["repository"]["full_name"].str();
 		
-		string ircMessage = "["~repositoryName~"] New commit "~commitMessage~" ("~commitID~") by "~authorName~" ("~authorEmail~") ["~commitURL~"]";
+		string ircMessage = bold("["~repositoryName~"]")~" New commit "~commitMessage~" ("~commitID~") by "~italics(authorName)~" ("~authorEmail~") ["~underline(commitURL)~"]";
 		ircBot.channelMessage(ircMessage, channelName); //TODO: Add IRC error handling
 
 		/* Send message to NTFY server */
@@ -158,7 +158,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 			string username = userBlock["username"].str();
 
 			//TODO: Add IRC error handling
-			string ircMessage = bold("["~repositoryName~"]")~" "~setForeground(SimpleColor.GREEN)~"New comment"~resetForegroundBackground()~" '"~italics(commentBody)~"' by "~italics(username)~" on issue "~bold("#"~to!(string)(issueID))~" "~underline(issueURL);
+			string ircMessage = bold("["~repositoryName~"]")~" "~setForeground(SimpleColor.GREEN)~"New comment"~resetForegroundBackground()~" '"~italics(commentBody)~"' by "~italics(username)~" on issue "~bold("#"~to!(string)(issueID))~" ["~underline(issueURL)~"]";
 			ircBot.channelMessage(ircMessage, channelName);		
 
 			/* Send message to NTFY server */
