@@ -48,7 +48,7 @@ An example configuration file can look as follows:
 ```json
 {
     "irc" : {
-        "host": "fd08:8441:e254::5",
+        "host": "irc.freenode.net",
         "port": 6667,
         "nickname": "tlangbot",
         "realname": "TLang Development Bot",
@@ -56,7 +56,7 @@ An example configuration file can look as follows:
     },
     "ntfy": {
         "endpoint": "http://ntfy.sh",
-        "topic": "tlang_dev"
+        "topic": "myTestFr"
     }
 }
 ```
