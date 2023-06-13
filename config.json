@@ -6,7 +6,7 @@
         }
     },
     "irc" : {
-        "host": "worcester.community.deavmi.crxn",
+        "host": "worcester.irc.bnet.eu.org",
         "port": 6667,
         "nickname": "tlangbot",
         "realname": "TLang Development Bot",
