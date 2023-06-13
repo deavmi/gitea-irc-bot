@@ -1,6 +1,8 @@
 gitea-irc-bot
 =============
 
+![](demo.png)
+
 ## Usage
 
 ### Webhook setup
