@@ -3,6 +3,9 @@
 gitea-irc-bot
 =============
 
+[![D](https://github.com/deavmi/gitea-irc-bot/actions/workflows/d.yml/badge.svg)](https://github.com/deavmi/gitea-irc-bot/actions/workflows/d.yml) ![DUB](https://img.shields.io/dub/v/gitea-irc-bot?color=%23c10000ff%20&style=flat-square) ![DUB](https://img.shields.io/dub/dt/gitea-irc-bot?style=flat-square) ![DUB](https://img.shields.io/dub/l/gitea-irc-bot?style=flat-square)
+
+
 ![](demo.png)
 
 ## Usage
