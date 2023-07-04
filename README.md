@@ -57,7 +57,10 @@ An example configuration file can look as follows:
         "port": 6667,
         "nickname": "tlangbot",
         "realname": "TLang Development Bot",
-        "channel": "#tlang"
+        "channels": {
+            "tlang" : "#tlang",
+            "repoName" : "#destinationChannel"
+        }
     },
     "ntfy": {
         "endpoint": "http://ntfy.sh",
