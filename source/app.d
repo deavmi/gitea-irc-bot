@@ -251,28 +251,26 @@ void notifySH(string message)
 	}
 }
 
-void main(string[] args)
+void main()
 {
 	string configFilePath;
 
-	/* If given an argument then use it as the configuration file */
-	if(args.length == 2)
+	import std.process : environment;
+
+	/* If given an environment variable then use it as the configuration file */
+	if(environment.get("GIB_CONFIG") !is null)
 	{
 		/* Configuration file path */
-		configFilePath = args[1];
+		configFilePath = environment.get("GIB_CONFIG");
 	}
-	/* If we have more than two arguments then it is an error */
-	else if(args.length > 2)
-	{
-		logger.error("Only one argument, the path to the configuration file, is allowed");
-		exit(-1);
-	}
-	/* If there are no arguments, assume default config.json file */
+	/* If there is no environment variable, assume default config.json file */
 	else
 	{
 		/* Set to the default config path */
 		configFilePath = "config.json";
 	}
+
+	
 
 	try
 	{
