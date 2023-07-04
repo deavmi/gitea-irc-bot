@@ -70,7 +70,7 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 		string repositoryName = json["repository"]["full_name"].str();
 	
 		/* Extract JUST the repository's name */
-		toChannel = json["repository"]["name"].str();
+		toChannel = associations[json["repository"]["name"].str()];
 		
 		string ircMessage = bold("["~repositoryName~"]")~" New commit "~commitMessage~" ("~commitID~") by "~italics(authorName)~" ("~authorEmail~") ["~underline(commitURL)~"]";
 		ircBot.channelMessage(ircMessage, toChannel); //TODO: Add IRC error handling
@@ -112,7 +112,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 		string repositoryName = issueBlock["repository"]["full_name"].str();
 
 		/* Extract JUST the repository's name */
-		toChannel = json["repository"]["name"].str();
+		toChannel = associations[json["repository"]["name"].str()];
 
 		/* Opened a new issue */
 		if(cmp(issueAction, "opened") == 0)
@@ -231,7 +231,7 @@ string serverHost;
 ushort serverPort;
 string nickname;
 string channelName;
-
+string[string] associations;
 
 /** 
  * Sends a message to ntfy.sh (only if it is enabled)
@@ -304,7 +304,16 @@ void main(string[] args)
 		serverHost = ircBlock["host"].str();
 		serverPort = cast(ushort)(ircBlock["port"].integer());
 		nickname = ircBlock["nickname"].str();
-		channelName = ircBlock["channel"].str();
+
+		/** 
+		 * Mapping between `repo -> #channel`
+		 */
+		JSONValue[string] channelAssociations = ircBlock["channels"].object();
+		foreach(string repoName; channelAssociations.keys())
+		{
+			associations[repoName] = channelAssociations[repoName].str();
+		}
+
 
 
 		/* Attempt to parse ntfy.sh configuration */
@@ -357,9 +366,9 @@ void main(string[] args)
 	//TODO: Clean this string up
     ircBot.command(new Message("", "USER", "giteabotweb giteabotweb irc.frdeenode.net :Tristan B. Kildaire"));
     
-	/* Join the requested channel */
+	/* Join the requested channels */
     Thread.sleep(dur!("seconds")(4));
-    ircBot.joinChannel(channelName);
+    ircBot.joinChannel(associations.keys());
 
 
 	/* Setup the web server */

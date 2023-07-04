@@ -8,9 +8,11 @@
     "irc" : {
         "host": "worcester.irc.bnet.eu.org",
         "port": 6667,
-        "nickname": "tlangbot",
+        "nickname": "tlangbot1",
         "realname": "TLang Development Bot",
-        "channel": "#tlang"
+        "channels": {
+            "tlang" : "#tlang"
+        }
     },
     "ntfy": {
         "endpoint": "http://ntfy.sh",
