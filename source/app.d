@@ -230,7 +230,7 @@ string ntfyServer, ntfyChannel;
 string serverHost;
 ushort serverPort;
 string nickname;
-string channelName;
+string[] channels;
 string[string] associations;
 
 /** 
@@ -307,11 +307,16 @@ void main(string[] args)
 
 		/** 
 		 * Mapping between `repo -> #channel`
+		 *
+		 * Extract from the JSON, build the map
+		 * and also construct a list of channels
+		 * 9which we will use later to join
 		 */
 		JSONValue[string] channelAssociations = ircBlock["channels"].object();
 		foreach(string repoName; channelAssociations.keys())
 		{
 			associations[repoName] = channelAssociations[repoName].str();
+			channels ~= associations[repoName];
 		}
 
 
@@ -368,7 +373,7 @@ void main(string[] args)
     
 	/* Join the requested channels */
     Thread.sleep(dur!("seconds")(4));
-    ircBot.joinChannel(associations.keys());
+    ircBot.joinChannel(channels);
 
 
 	/* Setup the web server */
