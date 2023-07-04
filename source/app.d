@@ -326,6 +326,11 @@ void main(string[] args)
 	
 	/* Configure IRC client */
 	ConnectionInfo connInfo = ConnectionInfo.newConnection(serverHost, serverPort, nickname, "tbot", "TLang Bot");
+
+	/* Set fakelag to none */
+	connInfo.setFakeLag(0);
+
+	/* Create a new IRC bot instance */
 	ircBot = new IRCBot(connInfo);
 
 	/* Connect to the server */
