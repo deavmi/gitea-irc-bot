@@ -48,6 +48,9 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 	int replyCode = 200;
 	replyJSON["output"]="";
 
+	/* Channel to eventually send to */
+	string toChannel;
+
 	try
 	{
 		/* Extract the received JSON */
@@ -65,9 +68,12 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 		string authorEmail = authorBlock["email"].str();
 
 		string repositoryName = json["repository"]["full_name"].str();
+	
+		/* Extract JUST the repository's name */
+		toChannel = json["repository"]["name"].str();
 		
 		string ircMessage = bold("["~repositoryName~"]")~" New commit "~commitMessage~" ("~commitID~") by "~italics(authorName)~" ("~authorEmail~") ["~underline(commitURL)~"]";
-		ircBot.channelMessage(ircMessage, channelName); //TODO: Add IRC error handling
+		ircBot.channelMessage(ircMessage, toChannel); //TODO: Add IRC error handling
 
 		/* Send message to NTFY server */
 		notifySH(ircMessage);
@@ -88,6 +94,9 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 	int replyCode = 200;
 	replyJSON["output"]="";
 
+	/* Channel to eventually send to */
+	string toChannel;
+
 	try
 	{
 		/* Extract the received JSON */
@@ -102,6 +111,9 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 		string issueAction = json["action"].str();
 		string repositoryName = issueBlock["repository"]["full_name"].str();
 
+		/* Extract JUST the repository's name */
+		toChannel = json["repository"]["name"].str();
+
 		/* Opened a new issue */
 		if(cmp(issueAction, "opened") == 0)
 		{
@@ -110,7 +122,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 			
 			//TODO: Add IRC error handling
 			string ircMessage = bold("["~repositoryName~"]")~setForeground(SimpleColor.GREEN)~" Opened issue"~resetForegroundBackground()~" '"~issueTitle~"' "~bold("#"~to!(string)(issueID))~" by "~italics(username)~" ["~underline(issueURL)~"]";
-			ircBot.channelMessage(ircMessage, channelName);
+			ircBot.channelMessage(ircMessage, toChannel);
 
 			/* Send message to NTFY server */
 			notifySH(ircMessage);
@@ -123,7 +135,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 			
 			//TODO: Add IRC error handling
 			string ircMessage = bold("["~repositoryName~"]")~setForeground(SimpleColor.RED)~" Closed issue"~resetForegroundBackground()~" '"~issueTitle~"' on issue "~bold("#"~to!(string)(issueID))~" by "~italics(username)~" ["~underline(issueURL)~"]";
-			ircBot.channelMessage(ircMessage, channelName);
+			ircBot.channelMessage(ircMessage, toChannel);
 
 			/* Send message to NTFY server */
 			notifySH(ircMessage);
@@ -136,7 +148,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 			
 			//TODO: Add IRC error handling
 			string ircMessage = bold("["~repositoryName~"]")~setForeground(SimpleColor.GREEN)~" Reopened issue"~resetForegroundBackground()~" '"~issueTitle~"' "~bold("#"~to!(string)(issueID))~" by "~italics(username)~" ["~underline(issueURL)~"]";
-			ircBot.channelMessage(ircMessage, channelName);
+			ircBot.channelMessage(ircMessage, toChannel);
 
 			/* Send message to NTFY server */
 			notifySH(ircMessage);
@@ -159,7 +171,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 
 			//TODO: Add IRC error handling
 			string ircMessage = bold("["~repositoryName~"]")~" "~setForeground(SimpleColor.GREEN)~"New comment"~resetForegroundBackground()~" '"~italics(commentBody)~"' by "~italics(username)~" on issue "~bold("#"~to!(string)(issueID))~" ["~underline(issueURL)~"]";
-			ircBot.channelMessage(ircMessage, channelName);		
+			ircBot.channelMessage(ircMessage, toChannel);		
 
 			/* Send message to NTFY server */
 			notifySH(ircMessage);
