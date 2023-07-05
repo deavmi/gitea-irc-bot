@@ -82,6 +82,13 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 	{
 		replyCode=500;
 		replyJSON["output"]=e.toString();
+
+		/* Check if we are not running, then to reconnect */
+		// FIXME: Currently unsafe!
+		if(ircBot.isRunning() == false)
+		{
+			ircBot.connect();
+		}
 	}
 	
 	response.writeJsonBody(replyJSON, 200);
@@ -181,6 +188,13 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 	{
 		replyCode=500;
 		replyJSON["output"]=e.toString();
+
+		/* Check if we are not running, then to reconnect */
+		// FIXME: Currently unsafe!
+		if(ircBot.isRunning() == false)
+		{
+			ircBot.connect();
+		}
 	}
 	
 	response.writeJsonBody(replyJSON, 200);
@@ -205,6 +219,13 @@ void pullRequestHandler(HTTPServerRequest request, HTTPServerResponse response)
 	{
 		replyCode=500;
 		replyJSON["output"]=e.toString();
+
+		/* Check if we are not running, then to reconnect */
+		// FIXME: Currently unsafe!
+		if(ircBot.isRunning() == false)
+		{
+			ircBot.connect();
+		}
 	}
 	
 	response.writeJsonBody(replyJSON, 200);
