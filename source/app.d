@@ -87,6 +87,7 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 		// FIXME: Currently unsafe!
 		if(ircBot.isRunning() == false)
 		{
+			logger.error("Looks like birchwood is disconnected!");
 			ircBot.connect();
 		}
 	}
@@ -193,6 +194,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 		// FIXME: Currently unsafe!
 		if(ircBot.isRunning() == false)
 		{
+			logger.error("Looks like birchwood is disconnected!");
 			ircBot.connect();
 		}
 	}
@@ -224,6 +226,7 @@ void pullRequestHandler(HTTPServerRequest request, HTTPServerResponse response)
 		// FIXME: Currently unsafe!
 		if(ircBot.isRunning() == false)
 		{
+			logger.error("Looks like birchwood is disconnected!");
 			ircBot.connect();
 		}
 	}
