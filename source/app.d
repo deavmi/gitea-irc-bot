@@ -91,7 +91,7 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 		}
 		else
 		{
-			log.warn("Ignoring /commit triggered but with empty commits");
+			logger.warn("Ignoring /commit triggered but with empty commits");
 		}
 	}
 	catch(Exception e)
