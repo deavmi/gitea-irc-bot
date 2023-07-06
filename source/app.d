@@ -57,26 +57,42 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 		JSONValue json = parseJSON(request.json().toString());
 		writeln(json.toPrettyString());
 
-		/* Extract the commit */
-		JSONValue commitBlock = json["commits"].array()[0];
-		string commitMessage = strip(commitBlock["message"].str());
-		string commitURL = commitBlock["url"].str();
-		string commitID = commitBlock["id"].str();
+		/* Extract the commits (if any) */
+		JSONValue[] commits = json["commits"].array();
 
-		JSONValue authorBlock = commitBlock["author"];
-		string authorName = authorBlock["name"].str();
-		string authorEmail = authorBlock["email"].str();
+		/** 
+		 * A tag push will have no commits,
+		 * for now ignore those. Only react
+		 * if we have at least one commit and
+		 * then react to the first one listed.
+		 */
+		if(commits.length > 0)
+		{
+			/* Extract the commit */
+			JSONValue commitBlock = json["commits"].array()[0];
+			string commitMessage = strip(commitBlock["message"].str());
+			string commitURL = commitBlock["url"].str();
+			string commitID = commitBlock["id"].str();
 
-		string repositoryName = json["repository"]["full_name"].str();
-	
-		/* Extract JUST the repository's name */
-		toChannel = associations[json["repository"]["name"].str()];
+			JSONValue authorBlock = commitBlock["author"];
+			string authorName = authorBlock["name"].str();
+			string authorEmail = authorBlock["email"].str();
+
+			string repositoryName = json["repository"]["full_name"].str();
 		
-		string ircMessage = bold("["~repositoryName~"]")~" New commit "~commitMessage~" ("~commitID~") by "~italics(authorName)~" ("~authorEmail~") ["~underline(commitURL)~"]";
-		ircBot.channelMessage(ircMessage, toChannel); //TODO: Add IRC error handling
+			/* Extract JUST the repository's name */
+			toChannel = associations[json["repository"]["name"].str()];
+			
+			string ircMessage = bold("["~repositoryName~"]")~" New commit "~commitMessage~" ("~commitID~") by "~italics(authorName)~" ("~authorEmail~") ["~underline(commitURL)~"]";
+			ircBot.channelMessage(ircMessage, toChannel); //TODO: Add IRC error handling
 
-		/* Send message to NTFY server */
-		notifySH(ircMessage);
+			/* Send message to NTFY server */
+			notifySH(ircMessage);
+		}
+		else
+		{
+			log.warn("Ignoring /commit triggered but with empty commits");
+		}
 	}
 	catch(Exception e)
 	{
