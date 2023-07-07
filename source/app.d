@@ -83,7 +83,7 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 			/* Extract JUST the repository's name */
 			toChannel = associations[json["repository"]["name"].str()];
 			
-			string ircMessage = bold("["~repositoryName~"]")~" New commit "~commitMessage~" ("~commitID~") by "~italics(authorName)~" ("~authorEmail~") ["~underline(commitURL)~"]";
+			string ircMessage = bold("["~repositoryName~"]")~setForeground(SimpleColor.GREEN)~" New commit "~resetForegroundBackground()~commitMessage~" ("~commitID~") by "~italics(authorName)~" ("~authorEmail~") ["~underline(commitURL)~"]";
 			ircBot.channelMessage(ircMessage, toChannel); //TODO: Add IRC error handling
 
 			/* Send message to NTFY server */
