@@ -186,7 +186,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 			string username = userBlock["username"].str();
 
 			//TODO: Add IRC error handling
-			string ircMessage = bold("["~repositoryName~"]")~" "~setForeground(SimpleColor.GREEN)~"New comment"~resetForegroundBackground()~" '"~italics(commentBody)~"' by "~italics(username)~" on issue "~bold("#"~to!(string)(issueID))~" ["~underline(issueURL)~"]";
+			string ircMessage = bold("["~repositoryName~"]")~" "~setForeground(SimpleColor.GREEN)~"New comment"~resetForegroundBackground()~" '"~italics(commentBody)~"' by "~italics(username)~" on issue "~bold("#"~to!(string)(issueID))~" "~issueTitle~" ["~underline(issueURL)~"]";
 			ircBot.channelMessage(ircMessage, toChannel);		
 
 			/* Send message to NTFY server */
