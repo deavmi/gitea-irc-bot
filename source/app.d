@@ -267,6 +267,30 @@ void notifySH(string message)
 	}
 }
 
+/** 
+ * Given a repository's name this will look it
+ * up in the key-value store to find the respective
+ * channel that should be used to send the message to
+ *
+ * Params:
+ *   repositoryName = the repository to lookup by
+ * Returns: the channel's name
+ * Throws:
+ *		Exception = if the repository does not exist
+ * in the map
+ */
+private string getRespectiveChannel(string repositoryName)
+{
+	string* channelName = repositoryName in associations;
+
+	if(channelName is null)
+	{
+		throw new Exception("No channel exists for repository '"~repositoryName~"'");
+	}
+	
+	return *channelName;
+}
+
 void main()
 {
 	string configFilePath;
