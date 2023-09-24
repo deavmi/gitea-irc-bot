@@ -81,7 +81,7 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 			string repositoryName = json["repository"]["full_name"].str();
 		
 			/* Extract JUST the repository's name */
-			toChannel = associations[json["repository"]["name"].str()];
+			toChannel = getRespectiveChannel(json["repository"]["name"].str());
 			
 			string ircMessage = bold("["~repositoryName~"]")~setForeground(SimpleColor.GREEN)~" New commit "~resetForegroundBackground()~commitMessage~" ("~commitID~") by "~italics(authorName)~" ("~authorEmail~") ["~underline(commitURL)~"]";
 			ircBot.channelMessage(ircMessage, toChannel); //TODO: Add IRC error handling
@@ -128,7 +128,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 		string repositoryName = issueBlock["repository"]["full_name"].str();
 
 		/* Extract JUST the repository's name */
-		toChannel = associations[json["repository"]["name"].str()];
+		toChannel = getRespectiveChannel(json["repository"]["name"].str());
 
 		/* Opened a new issue */
 		if(cmp(issueAction, "opened") == 0)
