@@ -81,7 +81,7 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 			string repositoryName = json["repository"]["full_name"].str();
 		
 			/* Extract JUST the repository's name */
-			toChannel = associations[json["repository"]["name"].str()];
+			toChannel = getRespectiveChannel(json["repository"]["name"].str());
 			
 			string ircMessage = bold("["~repositoryName~"]")~setForeground(SimpleColor.GREEN)~" New commit "~resetForegroundBackground()~commitMessage~" ("~commitID~") by "~italics(authorName)~" ("~authorEmail~") ["~underline(commitURL)~"]";
 			ircBot.channelMessage(ircMessage, toChannel); //TODO: Add IRC error handling
@@ -128,7 +128,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 		string repositoryName = issueBlock["repository"]["full_name"].str();
 
 		/* Extract JUST the repository's name */
-		toChannel = associations[json["repository"]["name"].str()];
+		toChannel = getRespectiveChannel(json["repository"]["name"].str());
 
 		/* Opened a new issue */
 		if(cmp(issueAction, "opened") == 0)
@@ -265,6 +265,30 @@ void notifySH(string message)
 		post(ntfyServer~"/"~ntfyChannel, message);
 		logger.info("Sending message to ntfy.sh ... [done]");
 	}
+}
+
+/** 
+ * Given a repository's name this will look it
+ * up in the key-value store to find the respective
+ * channel that should be used to send the message to
+ *
+ * Params:
+ *   repositoryName = the repository to lookup by
+ * Returns: the channel's name
+ * Throws:
+ *		Exception = if the repository does not exist
+ * in the map
+ */
+private string getRespectiveChannel(string repositoryName)
+{
+	string* channelName = repositoryName in associations;
+
+	if(channelName is null)
+	{
+		throw new Exception("No channel exists for repository '"~repositoryName~"'");
+	}
+	
+	return *channelName;
 }
 
 void main()
