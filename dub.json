@@ -6,6 +6,7 @@
 	"dependencies": {
 		"birchwood": ">=2.11.0",
 		"gogga": ">=2.1.18",
+		"hummus": ">=0.0.1-alpha <0.1.0-0",
 		"vibe-d": ">=0.9.6-beta.2"
 	},
 	"description": "A Gitea webhook-based IRC bot",

@@ -291,6 +291,38 @@ private string getRespectiveChannel(string repositoryName)
 	return *channelName;
 }
 
+import hummus;
+
+private struct WebhookConfig
+{
+	string bindAddress;
+	ushort port;
+}
+
+private struct IRCConfig
+{
+	string host;
+	ushort port;
+	string nickname;
+	string realname;
+
+	// encoded like: `repoName:channel,repoName:channel`
+	string channels;
+}
+
+private struct NtfyConfig
+{
+	string endpoint;
+	string topic;
+}
+
+private struct BotConfig
+{
+	WebhookConfig webhook;
+	IRCConfig irc;
+	NitfyComnfig ntfy;
+}
+
 void main()
 {
 	string configFilePath;
