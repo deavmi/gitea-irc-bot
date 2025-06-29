@@ -323,8 +323,17 @@ private struct BotConfig
 	NtfyComnfig ntfy;
 }
 
+private enum configJSONPath = "config.json";
+
 void main()
 {
+	// todo: setup JSON provider here to `config.json` in CWD
+	// todo: setup EnvironmentProvide here
+	// todo: attach to engine
+	auto cfgEngine = new Engine();
+	cfgEngine.attach(new JSONProvider(configJSONPath));
+	cfgEngine.attach(new EnvironmentProvider());
+
 	string configFilePath;
 
 	import std.process : environment;
