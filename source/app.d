@@ -320,7 +320,7 @@ private struct BotConfig
 {
 	WebhookConfig webhook;
 	IRCConfig irc;
-	NtfyComnfig ntfy;
+	NtfyConfig ntfy;
 }
 
 private enum configJSONPath = "config.json";
