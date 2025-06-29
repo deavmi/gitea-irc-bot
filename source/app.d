@@ -320,7 +320,7 @@ private struct BotConfig
 {
 	WebhookConfig webhook;
 	IRCConfig irc;
-	NitfyComnfig ntfy;
+	NtfyComnfig ntfy;
 }
 
 void main()
