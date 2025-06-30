@@ -318,7 +318,7 @@ private struct BotConfig
 	NtfyConfig ntfy;
 }
 
-private enum configJSONPath = "config.json";
+private enum configFilePath = "config.json";
 
 private void associate(string repoName, string channel)
 {
@@ -347,25 +347,6 @@ void main()
 		ERROR("No channels specified");
 		exit(-1);
 	}
-
-
-	string configFilePath;
-
-	import std.process : environment;
-
-	/* If given an environment variable then use it as the configuration file */
-	if(environment.get("GIB_CONFIG") !is null)
-	{
-		/* Configuration file path */
-		configFilePath = environment.get("GIB_CONFIG");
-	}
-	/* If there is no environment variable, assume default config.json file */
-	else
-	{
-		/* Set to the default config path */
-		configFilePath = "config.json";
-	}
-
 
 
 	try
