@@ -69,7 +69,7 @@ An example configuration file can look as follows:
 }
 ```
 
->`gitea-irc-bot` will **always** look for a configuration file named `config.json` in the _current working directory_
+**Note:** `gitea-irc-bot` will **always** look for a configuration file named `config.json` in the _current working directory_
 
 ## License
 
