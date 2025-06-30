@@ -476,9 +476,9 @@ void main()
     {
    	    ntfyServer = cfg.ntfy.endpoint;
     }
-    if(cfg.ntfy.channel.length)
+    if(cfg.ntfy.topic.length)
     {
-        ntfyChannel = cfg.ntfy.channel;
+        ntfyChannel = cfg.ntfy.topic;
     }
 
 	/* Configure IRC client */
