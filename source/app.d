@@ -11,16 +11,6 @@ import std.exception;
 import std.file;
 import core.stdc.stdlib : exit;
 
-import gogga;
-
-
-private __gshared GoggaLogger logger;
-static this()
-{
-	logger = new GoggaLogger();
-}
-
-
 import gogga.mixins;
 
 /** 
@@ -93,7 +83,7 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 		}
 		else
 		{
-			logger.warn("Ignoring /commit triggered but with empty commits");
+			WARN("Ignoring /commit triggered but with empty commits");
 		}
 	}
 	catch(Exception e)
@@ -263,9 +253,9 @@ void notifySH(string message)
 	
 	if(hasNTFYSH)
 	{
-		logger.info("Sending message to ntfy.sh ...");
+		INFO("Sending message to ntfy.sh ...");
 		post(ntfyServer~"/"~ntfyChannel, message);
-		logger.info("Sending message to ntfy.sh ... [done]");
+		INFO("Sending message to ntfy.sh ... [done]");
 	}
 }
 
@@ -351,7 +341,7 @@ void main()
 
 	if(cfg.irc.channels.length == 0)
 	{
-		logger.error("No channels specified");
+		ERROR("No channels specified");
 		exit(-1);
 	}
 
@@ -432,19 +422,19 @@ void main()
 		}
 		catch(JSONException e)
 		{
-			logger.warn("Not configuring NTFY as config is partially broken:\n\n"~e.msg);
+			WARN("Not configuring NTFY as config is partially broken:\n\n"~e.msg);
 		}
 
-		logger.info("Your configuration is: \n"~config.toPrettyString());
+		INFO("Your configuration is: \n"~config.toPrettyString());
 	}
 	catch(JSONException e)
 	{
-		logger.error("There was an error whilst parsing the config file:\n\n"~e.msg);
+		ERROR("There was an error whilst parsing the config file:\n\n"~e.msg);
 		exit(-1);
 	}
 	catch(ErrnoException e)
 	{
-		logger.error("There was a problem opening the configuration file: "~e.msg);
+		ERROR("There was a problem opening the configuration file: "~e.msg);
 		exit(-1);
 	}
 
