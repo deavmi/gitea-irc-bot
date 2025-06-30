@@ -10,6 +10,7 @@
         "port": 6667,
         "nickname": "tlangbot1",
         "realname": "TLang Development Bot",
+        "username": "tbot",
         "channels": {
             "tlang" : "#tlang"
         }
