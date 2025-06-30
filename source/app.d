@@ -405,7 +405,7 @@ void main()
 		 *
 		 * Extract from the JSON, build the map
 		 * and also construct a list of channels
-		 * 9which we will use later to join
+		 * which we will use later to join
 		 */
 		JSONValue[string] channelAssociations = ircBlock["channels"].object();
 		foreach(string repoName; channelAssociations.keys())
