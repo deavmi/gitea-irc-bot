@@ -463,6 +463,23 @@ void main()
         username = cfg.irc.username;
     }
 
+    if(cfg.webhook.bindAddress.length)
+    {
+        listenAddresses ~= cfg.webhook.bindAddress;
+    }
+    if(cfg.webhook.port > 0)
+    {
+        listenPort = cfg.webhook.port;
+    }
+
+    if(cfg.ntfy.endpoint.length)
+    {
+   	    ntfyServer = cfg.ntfy.endpoint;
+    }
+    if(cfg.ntfy.channel.length)
+    {
+        ntfyChannel = cfg.ntfy.channel;
+    }
 
 	/* Configure IRC client */
 	ConnectionInfo connInfo = ConnectionInfo.newConnection(serverHost, serverPort, nickname, username, realname);
