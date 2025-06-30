@@ -69,7 +69,7 @@ An example configuration file can look as follows:
 }
 ```
 
-You can run the program with `GIB_CONFIG=myConfig.json gitea-irc-bot` to specify a custom JSON configuration path other than the default.
+>`gitea-irc-bot` will **always** look for a configuration file named `config.json` in the _current working directory_
 
 ## License
 
