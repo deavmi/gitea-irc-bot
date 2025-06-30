@@ -3,7 +3,7 @@
 gitea-irc-bot
 =============
 
-![DUB](https://img.shields.io/dub/v/gitea-irc-bot?color=%23c10000ff%20&style=flat-square) ![DUB](https://img.shields.io/dub/dt/gitea-irc-bot?style=flat-square) ![DUB](https://img.shields.io/dub/l/gitea-irc-bot?style=flat-square)
+[![DUB](https://img.shields.io/dub/v/gitea-irc-bot?color=%23c10000ff%20&style=flat-square)](https://code.dlang.org/packages/gitea-irc-bot) [![DUB](https://img.shields.io/dub/dt/gitea-irc-bot?style=flat-square)](https://code.dlang.org/packages/gitea-irc-bot) ![DUB](https://img.shields.io/dub/l/gitea-irc-bot?style=flat-square)
 
 
 ![](demo.png)
@@ -57,6 +57,7 @@ An example configuration file can look as follows:
         "port": 6667,
         "nickname": "tlangbot",
         "realname": "TLang Development Bot",
+        "username": "tbot",
         "channels": {
             "tlang" : "#tlang",
             "repoName" : "#destinationChannel"
@@ -69,7 +70,31 @@ An example configuration file can look as follows:
 }
 ```
 
-You can run the program with `GIB_CONFIG=myConfig.json gitea-irc-bot` to specify a custom JSON configuration path other than the default.
+**Note:** `gitea-irc-bot` will **always** look for a configuration file named `config.json` in the _current working directory_
+
+#### Environment variables
+
+An example configuration file appears as follows:
+
+```bash
+# Webhook configuration
+export WEBHOOK__BINDADDRESS="0.0.0.0"
+export WEBHOOK__PORT=8080
+
+# IRC server
+export IRC__HOST="pinewood.irc.bnet.eu.org"
+export IRC__PORT=6667
+export IRC__NICKNAME="GiteaBot"
+export IRC__REALNAME="A Gitea bot written by deavmi"
+export IRC__CHANNELS="tlang:#tlang;thing2:#thing2Chan"
+export IRC__USERNAME="tbot"
+
+# Ntfy.sh
+export NTFY__ENDPOINT="http://ntfy.sh"
+export NTFY__TOPIC="tlang_dev"
+```
+
+**Note:** Specifying an environment variable will override the respective configuration parameter **entirely**.
 
 ## License
 
