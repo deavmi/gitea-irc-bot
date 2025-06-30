@@ -21,6 +21,8 @@ static this()
 }
 
 
+import gogga.mixins;
+
 /** 
  * TODO list
  *
@@ -325,14 +327,34 @@ private struct BotConfig
 
 private enum configJSONPath = "config.json";
 
+private void associate(string repoName, string channel)
+{
+	associations[repoName] = channel;
+	channels ~= channel;
+	INFO(format("Associated repository '%s' with channel %s", repoName, channel));
+}
+
 void main()
 {
 	// todo: setup JSON provider here to `config.json` in CWD
 	// todo: setup EnvironmentProvide here
 	// todo: attach to engine
 	auto cfgEngine = new Engine();
-	cfgEngine.attach(new JSONProvider(configJSONPath));
+	import hummus.providers.env;
+	// cfgEngine.attach(new JSONProvider(configJSONPath));
 	cfgEngine.attach(new EnvironmentProvider());
+
+	auto cfg = BotConfig();
+	cfgEngine.fill(cfg);
+
+	import std.string : split;
+
+	if(cfg.irc.channels.length == 0)
+	{
+		logger.error("No channels specified");
+		exit(-1);
+	}
+
 
 	string configFilePath;
 
@@ -394,11 +416,9 @@ void main()
 		JSONValue[string] channelAssociations = ircBlock["channels"].object();
 		foreach(string repoName; channelAssociations.keys())
 		{
-			associations[repoName] = channelAssociations[repoName].str();
-			channels ~= associations[repoName];
+			auto channelName = channelAssociations[repoName].str();
+			associate(repoName, channelName);
 		}
-
-
 
 		/* Attempt to parse ntfy.sh configuration */
 		try
@@ -428,7 +448,25 @@ void main()
 		exit(-1);
 	}
 
+	/* Environment variables override configuration file */
+	string[] assocs = split(cfg.irc.channels, ";");
+	if(assocs.length)
+	{
+		DEBUG("Parsed channels into: ", assocs);
+		foreach(chanAssoc; assocs)
+		{
+			auto s = split(chanAssoc, ":");
+			auto channelName = s[1];
+			auto repoName = s[0];
+			associate(repoName, channelName);
+		}		
+	}
+
+	serverHost = cfg.irc.host;
+	serverPort = cfg.irc.port;
 	
+
+
 	/* Configure IRC client */
 	ConnectionInfo connInfo = ConnectionInfo.newConnection(serverHost, serverPort, nickname, "tbot", "TLang Bot");
 
