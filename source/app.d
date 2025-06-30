@@ -13,7 +13,7 @@ import core.stdc.stdlib : exit;
 
 import gogga.mixins;
 
-/** 
+/**
  * TODO list
  *
  * 1. Fix the stripping of bad characters like \r\n etc etc in messages
@@ -52,7 +52,7 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 		/* Extract the commits (if any) */
 		JSONValue[] commits = json["commits"].array();
 
-		/** 
+		/**
 		 * A tag push will have no commits,
 		 * for now ignore those. Only react
 		 * if we have at least one commit and
@@ -71,10 +71,10 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 			string authorEmail = authorBlock["email"].str();
 
 			string repositoryName = json["repository"]["full_name"].str();
-		
+
 			/* Extract JUST the repository's name */
 			toChannel = getRespectiveChannel(json["repository"]["name"].str());
-			
+
 			string ircMessage = bold("["~repositoryName~"]")~setForeground(SimpleColor.GREEN)~" New commit "~resetForegroundBackground()~commitMessage~" ("~commitID~") by "~italics(authorName)~" ("~authorEmail~") ["~underline(commitURL)~"]";
 			ircBot.channelMessage(ircMessage, toChannel); //TODO: Add IRC error handling
 
@@ -91,7 +91,7 @@ void commitHandler(HTTPServerRequest request, HTTPServerResponse response)
 		replyCode=500;
 		replyJSON["output"]=e.toString();
 	}
-	
+
 	response.writeJsonBody(replyJSON, 200);
 }
 
@@ -127,7 +127,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 		{
 			JSONValue userBlock = issueBlock["user"];
 			string username = userBlock["username"].str();
-			
+
 			//TODO: Add IRC error handling
 			string ircMessage = bold("["~repositoryName~"]")~setForeground(SimpleColor.GREEN)~" Opened issue"~resetForegroundBackground()~" '"~issueTitle~"' "~bold("#"~to!(string)(issueID))~" by "~italics(username)~" ["~underline(issueURL)~"]";
 			ircBot.channelMessage(ircMessage, toChannel);
@@ -140,7 +140,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 		{
 			JSONValue userBlock = issueBlock["user"];
 			string username = userBlock["username"].str();
-			
+
 			//TODO: Add IRC error handling
 			string ircMessage = bold("["~repositoryName~"]")~setForeground(SimpleColor.RED)~" Closed issue"~resetForegroundBackground()~" '"~issueTitle~"' on issue "~bold("#"~to!(string)(issueID))~" by "~italics(username)~" ["~underline(issueURL)~"]";
 			ircBot.channelMessage(ircMessage, toChannel);
@@ -153,7 +153,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 		{
 			JSONValue userBlock = issueBlock["user"];
 			string username = userBlock["username"].str();
-			
+
 			//TODO: Add IRC error handling
 			string ircMessage = bold("["~repositoryName~"]")~setForeground(SimpleColor.GREEN)~" Reopened issue"~resetForegroundBackground()~" '"~issueTitle~"' "~bold("#"~to!(string)(issueID))~" by "~italics(username)~" ["~underline(issueURL)~"]";
 			ircBot.channelMessage(ircMessage, toChannel);
@@ -179,7 +179,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 
 			//TODO: Add IRC error handling
 			string ircMessage = bold("["~repositoryName~"]")~" "~setForeground(SimpleColor.GREEN)~"New comment"~resetForegroundBackground()~" '"~italics(commentBody)~"' by "~italics(username)~" on issue "~bold("#"~to!(string)(issueID))~" "~issueTitle~" ["~underline(issueURL)~"]";
-			ircBot.channelMessage(ircMessage, toChannel);		
+			ircBot.channelMessage(ircMessage, toChannel);
 
 			/* Send message to NTFY server */
 			notifySH(ircMessage);
@@ -190,7 +190,7 @@ void issueHandler(HTTPServerRequest request, HTTPServerResponse response)
 		replyCode=500;
 		replyJSON["output"]=e.toString();
 	}
-	
+
 	response.writeJsonBody(replyJSON, 200);
 }
 
@@ -214,7 +214,7 @@ void pullRequestHandler(HTTPServerRequest request, HTTPServerResponse response)
 		replyCode=500;
 		replyJSON["output"]=e.toString();
 	}
-	
+
 	response.writeJsonBody(replyJSON, 200);
 }
 
@@ -238,10 +238,12 @@ string ntfyServer, ntfyChannel;
 string serverHost;
 ushort serverPort;
 string nickname;
+string username;
+string realname;
 string[] channels;
 string[string] associations;
 
-/** 
+/**
  * Sends a message to ntfy.sh (only if it is enabled)
  *
  * Params:
@@ -250,7 +252,7 @@ string[string] associations;
 void notifySH(string message)
 {
 	//TODO: Add support for fancier formatted NTFY.SH messages
-	
+
 	if(hasNTFYSH)
 	{
 		INFO("Sending message to ntfy.sh ...");
@@ -259,7 +261,7 @@ void notifySH(string message)
 	}
 }
 
-/** 
+/**
  * Given a repository's name this will look it
  * up in the key-value store to find the respective
  * channel that should be used to send the message to
@@ -279,7 +281,7 @@ private string getRespectiveChannel(string repositoryName)
 	{
 		throw new Exception("No channel exists for repository '"~repositoryName~"'");
 	}
-	
+
 	return *channelName;
 }
 
@@ -297,6 +299,7 @@ private struct IRCConfig
 	ushort port;
 	string nickname;
 	string realname;
+	string username;
 
 	// encoded like: `repoName:channel,repoName:channel`
 	string channels;
@@ -363,7 +366,7 @@ void main()
 		configFilePath = "config.json";
 	}
 
-	
+
 
 	try
 	{
@@ -395,8 +398,9 @@ void main()
 		serverHost = ircBlock["host"].str();
 		serverPort = cast(ushort)(ircBlock["port"].integer());
 		nickname = ircBlock["nickname"].str();
+		username = ircBlock["username"].str();
 
-		/** 
+		/**
 		 * Mapping between `repo -> #channel`
 		 *
 		 * Extract from the JSON, build the map
@@ -439,26 +443,45 @@ void main()
 	}
 
 	/* Environment variables override configuration file */
-	string[] assocs = split(cfg.irc.channels, ";");
-	if(assocs.length)
+	if(cfg.irc.channels.length)
 	{
-		DEBUG("Parsed channels into: ", assocs);
-		foreach(chanAssoc; assocs)
-		{
-			auto s = split(chanAssoc, ":");
-			auto channelName = s[1];
-			auto repoName = s[0];
-			associate(repoName, channelName);
-		}		
-	}
-
-	serverHost = cfg.irc.host;
-	serverPort = cfg.irc.port;
-	
+	    string[] assocs = split(cfg.irc.channels, ";");
+    	if(assocs.length)
+    	{
+    		DEBUG("Parsed channels into: ", assocs);
+    		foreach(chanAssoc; assocs)
+    		{
+    			auto s = split(chanAssoc, ":");
+    			auto channelName = s[1];
+    			auto repoName = s[0];
+    			associate(repoName, channelName);
+    		}
+    	}
+    }
+    if(cfg.irc.host.length)
+    {
+        serverHost = cfg.irc.host;
+    }
+    if(cfg.irc.port)
+    {
+        serverPort = cfg.irc.port;
+    }
+    if(cfg.irc.nickname.length)
+    {
+        nickname = cfg.irc.nickname;
+    }
+    if(cfg.irc.realname.length)
+    {
+        realname = cfg.irc.realname;
+    }
+    if(cfg.irc.username.length)
+    {
+        username = cfg.irc.username;
+    }
 
 
 	/* Configure IRC client */
-	ConnectionInfo connInfo = ConnectionInfo.newConnection(serverHost, serverPort, nickname, "tbot", "TLang Bot");
+	ConnectionInfo connInfo = ConnectionInfo.newConnection(serverHost, serverPort, nickname, username, realname);
 
 	/* Set fakelag to none */
 	connInfo.setFakeLag(0);
@@ -477,7 +500,7 @@ void main()
     Thread.sleep(dur!("seconds")(2));
 	//TODO: Clean this string up
     ircBot.command(new Message("", "USER", "giteabotweb giteabotweb irc.frdeenode.net :Tristan B. Kildaire"));
-    
+
 	/* Join the requested channels */
     Thread.sleep(dur!("seconds")(4));
     ircBot.joinChannel(channels);
