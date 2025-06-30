@@ -327,6 +327,21 @@ private void associate(string repoName, string channel)
 	INFO(format("Associated repository '%s' with channel %s", repoName, channel));
 }
 
+import hummus.provider;
+private class DefaultsProvider : Provider
+{
+    protected bool provideImpl(string n, ref string v_out)
+    {
+        if(n == "irc.address")
+        {
+            v_out = "::";
+            return true;
+        }
+
+        return false;
+    }
+}
+
 void main()
 {
 	// todo: setup JSON provider here to `config.json` in CWD
@@ -336,6 +351,7 @@ void main()
 	import hummus.providers.env;
 	// cfgEngine.attach(new JSONProvider(configJSONPath));
 	cfgEngine.attach(new EnvironmentProvider());
+	cfgEngine.attach(new DefaultsProvider());
 
 	auto cfg = BotConfig();
 	cfgEngine.fill(cfg);
