@@ -11,3 +11,7 @@ export IRC__NICKNAME="GiteaBot"
 export IRC__REALNAME="A Gitea bot written by deavmi"
 export IRC__CHANNELS="tlang:#tlang;thing2:#thing2Chan"
 export IRC__USERNAME="tbot"
+
+# Ntfy.sh
+export NTFY__ENDPOINT="http://ntfy.sh"
+export NTFY__TOPIC="tlang_dev"
