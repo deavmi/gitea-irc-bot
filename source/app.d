@@ -348,7 +348,7 @@ void main()
 		exit(-1);
 	}
 
-	import std.file : exsts, isFile;
+	import std.file : exists, isFile;
 	if(exists(configFilePath) && isFile(configFilePath))
 	{
     	try
