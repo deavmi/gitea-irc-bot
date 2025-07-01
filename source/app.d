@@ -343,9 +343,12 @@ private class DefaultsProvider : Provider
     }
 }
 
+/**
+ * Perform configuration
+ */
 private void doConfig()
 {
-auto cfgEngine = new Engine();
+    auto cfgEngine = new Engine();
 	import hummus.providers.env;
 	// todo: setup JSON provider here to `config.json` in CWD
 	// cfgEngine.attach(new JSONProvider(configJSONPath));
