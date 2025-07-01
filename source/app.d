@@ -1,3 +1,10 @@
+/**
+ * Main entrypoint
+ *
+ * Authors: Tristan Brice Velloza Kildaire (deavmi)
+ */
+module app;
+
 import std.stdio;
 import birchwood;
 import core.thread;
@@ -227,7 +234,7 @@ void pullRequestHandler(HTTPServerRequest request, HTTPServerResponse response)
 IRCBot ircBot;
 
 /* Configuration file */
-JSONValue config;
+private JSONValue config;
 
 
 private string[] listenAddresses;
