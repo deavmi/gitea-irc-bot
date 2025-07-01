@@ -230,19 +230,19 @@ IRCBot ircBot;
 JSONValue config;
 
 
-string[] listenAddresses;
-ushort listenPort;
+private string[] listenAddresses;
+private ushort listenPort;
 
-bool hasNTFYSH = false;
-string ntfyServer, ntfyChannel;
+private bool hasNTFYSH = false;
+private string ntfyServer, ntfyChannel;
 
-string serverHost;
-ushort serverPort;
-string nickname;
-string username;
-string realname;
-string[] channels;
-string[string] associations;
+private string serverHost;
+private ushort serverPort;
+private string nickname;
+private string username;
+private string realname;
+private string[] channels;
+private string[string] associations;
 
 /**
  * Sends a message to ntfy.sh (only if it is enabled)
