@@ -528,6 +528,10 @@ void main()
 	httpServerSettings.port = listenPort;
 	httpServerSettings.bindAddresses = listenAddresses;
 
+	DEBUG("Server port: ", listenPort);
+	DEBUG("Bind addresses: ", listenAddresses);
+	DEBUG(httpServerSettings);
+
 	/* Create a router and add the supported routes */
 	URLRouter router = new URLRouter();
 	router.post("/commit", &commitHandler);
