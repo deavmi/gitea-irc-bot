@@ -479,6 +479,7 @@ void main()
         username = cfg.irc.username;
     }
 
+    ERROR("cfg.webhook.bindAddress: ", cfg.webhook.bindAddress);
     if(cfg.webhook.bindAddress.length)
     {
         listenAddresses ~= cfg.webhook.bindAddress;
