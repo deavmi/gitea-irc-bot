@@ -10,6 +10,7 @@ import gogga;
 import std.exception;
 import std.file;
 import core.stdc.stdlib : exit;
+import std.string : split;
 
 import gogga.mixins;
 
@@ -345,8 +346,6 @@ private class DefaultsProvider : Provider
 void main()
 {
 	// todo: setup JSON provider here to `config.json` in CWD
-	// todo: setup EnvironmentProvide here
-	// todo: attach to engine
 	auto cfgEngine = new Engine();
 	import hummus.providers.env;
 	// cfgEngine.attach(new JSONProvider(configJSONPath));
@@ -355,8 +354,6 @@ void main()
 
 	auto cfg = BotConfig();
 	cfgEngine.fill(cfg);
-
-	import std.string : split;
 
 	if(cfg.irc.channels.length == 0)
 	{
