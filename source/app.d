@@ -329,6 +329,11 @@ private void associate(string repoName, string channel)
 }
 
 import hummus.provider;
+
+/**
+ * Provides sane default values for
+ * some configuration values
+ */
 private class DefaultsProvider : Provider
 {
     protected bool provideImpl(string n, ref string v_out)
