@@ -497,6 +497,7 @@ auto cfgEngine = new Engine();
 
 void main()
 {
+    // configure the parameters
 	doConfig();
 
 	/* Configure IRC client */
