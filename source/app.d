@@ -325,7 +325,7 @@ private void associate(string repoName, string channel)
 {
 	associations[repoName] = channel;
 	channels ~= channel;
-	INFO(format("Associated repository '%s' with channel %s", repoName, channel));
+	DEBUG(format("Associated repository '%s' with channel %s", repoName, channel));
 }
 
 import hummus.provider;
