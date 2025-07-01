@@ -332,7 +332,7 @@ private class DefaultsProvider : Provider
 {
     protected bool provideImpl(string n, ref string v_out)
     {
-        if(n == "irc.address")
+        if(n == "webhook.bindAddress")
         {
             v_out = "::";
             return true;
