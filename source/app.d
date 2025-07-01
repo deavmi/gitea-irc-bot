@@ -479,7 +479,6 @@ void main()
         username = cfg.irc.username;
     }
 
-    ERROR("cfg.webhook.bindAddress: ", cfg.webhook.bindAddress);
     if(cfg.webhook.bindAddress.length)
     {
         listenAddresses ~= cfg.webhook.bindAddress;
@@ -528,10 +527,6 @@ void main()
 	HTTPServerSettings httpServerSettings = new HTTPServerSettings();
 	httpServerSettings.port = listenPort;
 	httpServerSettings.bindAddresses = listenAddresses;
-
-	DEBUG("Server port: ", listenPort);
-	DEBUG("Bind addresses: ", listenAddresses);
-	DEBUG(httpServerSettings);
 
 	/* Create a router and add the supported routes */
 	URLRouter router = new URLRouter();
