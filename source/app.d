@@ -343,11 +343,11 @@ private class DefaultsProvider : Provider
     }
 }
 
-void main()
+private void doConfig()
 {
-	// todo: setup JSON provider here to `config.json` in CWD
-	auto cfgEngine = new Engine();
+auto cfgEngine = new Engine();
 	import hummus.providers.env;
+	// todo: setup JSON provider here to `config.json` in CWD
 	// cfgEngine.attach(new JSONProvider(configJSONPath));
 	cfgEngine.attach(new EnvironmentProvider());
 	cfgEngine.attach(new DefaultsProvider());
@@ -364,135 +364,140 @@ void main()
 	import std.file : exists, isFile;
 	if(exists(configFilePath) && isFile(configFilePath))
 	{
-    	try
-    	{
-    		File configFile;
-    		configFile.open(configFilePath);
+   	try
+   	{
+   		File configFile;
+   		configFile.open(configFilePath);
 
-    		ubyte[] configData;
-    		configData.length = configFile.size();
-    		configData = configFile.rawRead(configData);
-    		configFile.close();
+   		ubyte[] configData;
+   		configData.length = configFile.size();
+   		configData = configFile.rawRead(configData);
+   		configFile.close();
 
-    		/* Parse the configuration */
-    		config = parseJSON(cast(string)configData);
+   		/* Parse the configuration */
+   		config = parseJSON(cast(string)configData);
 
-    		/* Web hook server details */
-    		JSONValue webhookBlock = config["webhook"];
-    		JSONValue listenBlock = webhookBlock["listen"];
-    		JSONValue[] listenAddressesJSON = listenBlock["addresses"].array();
-    		foreach(JSONValue listenAddress; listenAddressesJSON)
-    		{
-    			/* Get the listening address */
-    			string listenAddressStr = listenAddress.str();
-    			listenAddresses~=listenAddressStr;
-    		}
-    		listenPort = cast(ushort)(listenBlock["port"].integer());
+   		/* Web hook server details */
+   		JSONValue webhookBlock = config["webhook"];
+   		JSONValue listenBlock = webhookBlock["listen"];
+   		JSONValue[] listenAddressesJSON = listenBlock["addresses"].array();
+   		foreach(JSONValue listenAddress; listenAddressesJSON)
+   		{
+   			/* Get the listening address */
+   			string listenAddressStr = listenAddress.str();
+   			listenAddresses~=listenAddressStr;
+   		}
+   		listenPort = cast(ushort)(listenBlock["port"].integer());
 
-    		/* IRC server details */
-    		JSONValue ircBlock = config["irc"];
-    		serverHost = ircBlock["host"].str();
-    		serverPort = cast(ushort)(ircBlock["port"].integer());
-    		nickname = ircBlock["nickname"].str();
-    		username = ircBlock["username"].str();
+   		/* IRC server details */
+   		JSONValue ircBlock = config["irc"];
+   		serverHost = ircBlock["host"].str();
+   		serverPort = cast(ushort)(ircBlock["port"].integer());
+   		nickname = ircBlock["nickname"].str();
+   		username = ircBlock["username"].str();
 
-    		/**
-    		 * Mapping between `repo -> #channel`
-    		 *
-    		 * Extract from the JSON, build the map
-    		 * and also construct a list of channels
-    		 * which we will use later to join
-    		 */
-    		JSONValue[string] channelAssociations = ircBlock["channels"].object();
-    		foreach(string repoName; channelAssociations.keys())
-    		{
-    			auto channelName = channelAssociations[repoName].str();
-    			associate(repoName, channelName);
-    		}
+   		/**
+   		 * Mapping between `repo -> #channel`
+   		 *
+   		 * Extract from the JSON, build the map
+   		 * and also construct a list of channels
+   		 * which we will use later to join
+   		 */
+   		JSONValue[string] channelAssociations = ircBlock["channels"].object();
+   		foreach(string repoName; channelAssociations.keys())
+   		{
+   			auto channelName = channelAssociations[repoName].str();
+   			associate(repoName, channelName);
+   		}
 
-    		/* Attempt to parse ntfy.sh configuration */
-    		try
-    		{
-    			JSONValue configNTFY = config["ntfy"];
+   		/* Attempt to parse ntfy.sh configuration */
+   		try
+   		{
+   			JSONValue configNTFY = config["ntfy"];
 
-    			ntfyServer = configNTFY["endpoint"].str();
-    			ntfyChannel = configNTFY["topic"].str();
+   			ntfyServer = configNTFY["endpoint"].str();
+   			ntfyChannel = configNTFY["topic"].str();
 
-    			hasNTFYSH = true;
-    		}
-    		catch(JSONException e)
-    		{
-    			WARN("Not configuring NTFY as config is partially broken:\n\n"~e.msg);
-    		}
+   			hasNTFYSH = true;
+   		}
+   		catch(JSONException e)
+   		{
+   			WARN("Not configuring NTFY as config is partially broken:\n\n"~e.msg);
+   		}
 
-    		INFO("Your configuration is: \n"~config.toPrettyString());
-    	}
-    	catch(JSONException e)
-    	{
-    		ERROR("There was an error whilst parsing the config file:\n\n"~e.msg);
-    		exit(-1);
-    	}
-    	catch(ErrnoException e)
-    	{
-    		ERROR("There was a problem opening the configuration file: "~e.msg);
-    		exit(-1);
-    	}
-     }
+   		INFO("Your configuration is: \n"~config.toPrettyString());
+   	}
+   	catch(JSONException e)
+   	{
+   		ERROR("There was an error whilst parsing the config file:\n\n"~e.msg);
+   		exit(-1);
+   	}
+   	catch(ErrnoException e)
+   	{
+   		ERROR("There was a problem opening the configuration file: "~e.msg);
+   		exit(-1);
+   	}
+    }
 
 	/* Environment variables override configuration file */
 	if(cfg.irc.channels.length)
 	{
 	    string[] assocs = split(cfg.irc.channels, ";");
-    	if(assocs.length)
-    	{
-    		DEBUG("Parsed channels into: ", assocs);
-    		foreach(chanAssoc; assocs)
-    		{
-    			auto s = split(chanAssoc, ":");
-    			auto channelName = s[1];
-    			auto repoName = s[0];
-    			associate(repoName, channelName);
-    		}
-    	}
-    }
-    if(cfg.irc.host.length)
-    {
-        serverHost = cfg.irc.host;
-    }
-    if(cfg.irc.port)
-    {
-        serverPort = cfg.irc.port;
-    }
-    if(cfg.irc.nickname.length)
-    {
-        nickname = cfg.irc.nickname;
-    }
-    if(cfg.irc.realname.length)
-    {
-        realname = cfg.irc.realname;
-    }
-    if(cfg.irc.username.length)
-    {
-        username = cfg.irc.username;
-    }
+   	if(assocs.length)
+   	{
+   		DEBUG("Parsed channels into: ", assocs);
+   		foreach(chanAssoc; assocs)
+   		{
+   			auto s = split(chanAssoc, ":");
+   			auto channelName = s[1];
+   			auto repoName = s[0];
+   			associate(repoName, channelName);
+   		}
+   	}
+   }
+   if(cfg.irc.host.length)
+   {
+       serverHost = cfg.irc.host;
+   }
+   if(cfg.irc.port)
+   {
+       serverPort = cfg.irc.port;
+   }
+   if(cfg.irc.nickname.length)
+   {
+       nickname = cfg.irc.nickname;
+   }
+   if(cfg.irc.realname.length)
+   {
+       realname = cfg.irc.realname;
+   }
+   if(cfg.irc.username.length)
+   {
+       username = cfg.irc.username;
+   }
 
-    if(cfg.webhook.bindAddress.length)
-    {
-        listenAddresses ~= cfg.webhook.bindAddress;
-    }
-    if(cfg.webhook.port > 0)
-    {
-        listenPort = cfg.webhook.port;
-    }
+   if(cfg.webhook.bindAddress.length)
+   {
+       listenAddresses ~= cfg.webhook.bindAddress;
+   }
+   if(cfg.webhook.port > 0)
+   {
+       listenPort = cfg.webhook.port;
+   }
 
-    if(cfg.ntfy.endpoint.length)
-    {
-   	    ntfyServer = cfg.ntfy.endpoint;
-    }
-    if(cfg.ntfy.topic.length)
-    {
-        ntfyChannel = cfg.ntfy.topic;
-    }
+   if(cfg.ntfy.endpoint.length)
+   {
+  	    ntfyServer = cfg.ntfy.endpoint;
+   }
+   if(cfg.ntfy.topic.length)
+   {
+       ntfyChannel = cfg.ntfy.topic;
+   }
+}
+
+void main()
+{
+	doConfig();
 
 	/* Configure IRC client */
 	ConnectionInfo connInfo = ConnectionInfo.newConnection(serverHost, serverPort, nickname, username, realname);
