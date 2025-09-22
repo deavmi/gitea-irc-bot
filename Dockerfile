@@ -28,10 +28,12 @@ RUN dub build
 
 RUN ls -la && sleep 20
 RUN pwd && sleep 20
+RUN touch 1
 
 
 # Base image (for deployment)
 FROM ubuntu:noble AS base
+COPY --from=build /1 /1
 COPY --from=build /gitea-irc-bot /bin/bot
 RUN chmod +x /bin/bot
 
