@@ -9,7 +9,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update
 
 # Install build dependencies
-RUN apt install git -y
 RUN apt install dub gcc -y
 RUN apt install libssl-dev zlib1g-dev -y
 
