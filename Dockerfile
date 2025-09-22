@@ -13,11 +13,12 @@ RUN apt install dub gcc -y
 RUN apt install libssl-dev zlib1g-dev -y
 
 # Bring all source into here
-COPY * .
+COPY . .
 
 # Perform build
 RUN dub build
 
+RUN ls -la source
 RUN ls -la && sleep 20
 RUN pwd && sleep 20
 
