@@ -25,7 +25,7 @@ WORKDIR /root
 COPY * .
 
 # Perform build
-RUN dub build -v
+RUN dub build
 
 RUN ls -la && sleep 20
 RUN pwd && sleep 20
