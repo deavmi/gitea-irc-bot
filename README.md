@@ -99,3 +99,9 @@ export NTFY__TOPIC="tlang_dev"
 ## License
 
 AGPL 3.0
+
+## Credits
+
+Thanks so much to `selckin` and `BtbN` on Libera IRC,
+helped me with the GitHub Actions and fixing my erroneous
+`Dockerfile`.
