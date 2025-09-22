@@ -52,7 +52,7 @@ jobs:
         id: push
         uses: docker/build-push-action@v6.18.0
         with:
-          no-cache: true
+          # no-cache: true
           no-cache-filters: build
           context: .
           push: true
