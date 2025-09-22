@@ -16,12 +16,14 @@ RUN apt install libssl-dev zlib1g-dev -y
 COPY * .
 
 # Perform build
-RUN echo 1
+# RUN echo 1
 RUN dub build --force 
 
-RUN touch 1
-RUN ls -la && sleep 20
-RUN pwd && sleep 20
+# RUN touch 1
+# RUN ls -la && sleep 20
+# RUN pwd && sleep 20
+
+RUN find / -iname '*bot*' && sleep 20
 
 
 # Base image (for deployment)
