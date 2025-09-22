@@ -17,7 +17,7 @@ COPY * .
 
 # Perform build
 RUN echo 1
-RUN dub build
+RUN dub build --force 
 
 RUN touch 1
 RUN ls -la && sleep 20
