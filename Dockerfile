@@ -16,6 +16,7 @@ RUN apt install libssl-dev zlib1g-dev -y
 COPY * .
 
 # Perform build
+RUN echo 1
 RUN dub build
 
 RUN touch 1
