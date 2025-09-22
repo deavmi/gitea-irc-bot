@@ -12,6 +12,5 @@
 	"description": "A Gitea webhook-based IRC bot",
 	"license": "AGPL-3.0",
 	"name": "gitea-irc-bot",
-	"versions": ["DBG_DEBUG_LOGGING", "DBG_VERBOSE_LOGGING"],
-	"targetName": "kak"
+	"versions": ["DBG_DEBUG_LOGGING", "DBG_VERBOSE_LOGGING"]
 }
