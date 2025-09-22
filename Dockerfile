@@ -25,7 +25,7 @@ RUN dub build -v
 
 # Base image (for deployment)
 FROM ubuntu:noble AS base
-COPY --from=build /tmp/src/gitea-irc-bot /bin/bot
+COPY --from=build gitea-irc-bot /bin/bot
 RUN chmod +x /bin/bot
 
 # Don't allow interactive prompts when using apt
