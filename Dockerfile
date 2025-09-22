@@ -21,6 +21,7 @@ RUN apt install libssl-dev zlib1g-dev -y
 # RUN git checkout $COMMIT
 
 # Bring all source into here
+WORKDIR /root
 COPY * .
 
 # Perform build
@@ -32,7 +33,7 @@ RUN pwd && sleep 20
 
 # Base image (for deployment)
 FROM ubuntu:noble AS base
-COPY --from=build gitea-irc-bot /bin/bot
+COPY --from=build /root/gitea-irc-bot /bin/bot
 RUN chmod +x /bin/bot
 
 # Don't allow interactive prompts when using apt
