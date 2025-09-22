@@ -26,6 +26,10 @@ COPY * .
 # Perform build
 RUN dub build -v
 
+RUN ls -la && sleep 20
+RUN pwd && sleep 20
+
+
 # Base image (for deployment)
 FROM ubuntu:noble AS base
 COPY --from=build gitea-irc-bot /bin/bot
