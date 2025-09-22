@@ -26,10 +26,13 @@ COPY * .
 # Perform build
 RUN dub build
 
+RUN ls -la && sleep 20
+RUN pwd && sleep 20
+
+
 # Base image (for deployment)
 FROM ubuntu:noble AS base
-# COPY --from=build /gitea-irc-bot /bin/bot
-COPY --from=build /* /bin
+COPY --from=build /gitea-irc-bot /bin/bot
 RUN chmod +x /bin/bot
 
 # Don't allow interactive prompts when using apt
