@@ -24,3 +24,20 @@ WORKDIR /tmp
 
 # Perform build
 RUN dub build -v
+
+# Base image (for deployment)
+FROM ubuntu:noble AS base
+COPY --from=build /tmp/src/gitea-irc-bot /bin/bot
+RUN chmod +x /bin/bot
+
+# Don't allow interactive prompts when using apt
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Needed for runtime-linked libraries for D-based
+# applications
+RUN apt update
+RUN apt install libphobos2-ldc-shared106 -y
+
+# We look for config.json here
+WORKDIR /
+CMD ["/bin/bot"]
