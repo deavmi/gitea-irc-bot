@@ -20,6 +20,9 @@ RUN apt install libssl-dev zlib1g-dev -y
 # TODO: Enable the below
 # RUN git checkout $COMMIT
 
+# Bring all source into here
+COPY * .
+
 # Perform build
 RUN dub build -v
 
