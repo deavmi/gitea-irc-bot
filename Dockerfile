@@ -17,8 +17,6 @@ RUN apt install git -y
 RUN apt install dub gcc -y
 RUN apt install libssl-dev zlib1g-dev -y
 
-# Move to `/tmp`
-WORKDIR /tmp
 # TODO: Enable the below
 # RUN git checkout $COMMIT
 
